@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "aI5qohr9rOIQvNPDi9vvjZhmuWkM1hE8G6K07uCKzKt4bCPO3UNndy8YbJzdZwwZR/EGxvI6k4dSOZ81QHnEDA==",
+  "success": true,
+  "projectFilePath": "C:\\PRIORITY FILES\\Zelos\\zelos-hub\\zelos-hub.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Joe\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.17.2\\microsoft.visualstudio.azure.containers.tools.targets.1.17.2.nupkg.sha512",
+    "C:\\Users\\Joe\\.nuget\\packages\\pipelines.sockets.unofficial\\2.2.2\\pipelines.sockets.unofficial.2.2.2.nupkg.sha512",
+    "C:\\Users\\Joe\\.nuget\\packages\\stackexchange.redis\\2.6.111\\stackexchange.redis.2.6.111.nupkg.sha512",
+    "C:\\Users\\Joe\\.nuget\\packages\\system.io.pipelines\\5.0.1\\system.io.pipelines.5.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

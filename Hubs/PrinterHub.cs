@@ -20,7 +20,13 @@ public class PrinterHub: Hub {
 
         while (true) {
 
-            if (Redis.IsConnected("printer_data")) {
+            Thread.Sleep(3000);
+
+            if (Redis.IsConnected("printer_data"))
+            {
+                if (Redis.StringGet("printer_data") == printer_data)
+                    continue;
+
                 printer_data = Redis.StringGet("printer_data");
                 Console.WriteLine(printer_data);
                 await Clients.All.SendAsync("printer_data", printer_data);
@@ -29,10 +35,7 @@ public class PrinterHub: Hub {
             else {
                 Console.WriteLine("Redis is not connected");
             }
-
-            Thread.Sleep(3000);
         }
-
     }
 
 

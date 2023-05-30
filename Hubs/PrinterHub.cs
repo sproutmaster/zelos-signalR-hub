@@ -1,15 +1,44 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using zelos_hub.Utilities;
+﻿using StackExchange.Redis;
+
 namespace zelos_hub.Hubs;
+
+using Microsoft.AspNetCore.SignalR;
+using zelos_hub.Utilities;
+using System;
+
+
 public class PrinterHub: Hub {
-    public async Task SendMessage(string user, string message) {
-        
-        // var redis = RedisStore.RedisCache;
-        // if(redis.StringSet("printer_data", "testValue")) {
-        //     var val = redis.StringGet("testKey");
-        //     Console.WriteLine(val);
-        // }
-        
-        await Clients.All.SendAsync("ReceiveMessage", user, message);
+
+    public StackExchange.Redis.IDatabase? Redis;
+    public string? printer_data;
+
+    public override async Task OnConnectedAsync() {
+
+        await base.OnConnectedAsync();
+
+        Redis = RedisStore.RedisCache;
+
+        while (true) {
+
+            if (Redis.IsConnected("printer_data")) {
+                printer_data = Redis.StringGet("printer_data");
+                Console.WriteLine(printer_data);
+                await Clients.All.SendAsync("printer_data", printer_data);
+            }
+
+            else {
+                Console.WriteLine("Redis is not connected");
+            }
+
+            Thread.Sleep(3000);
+        }
+
     }
+
+
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        await base.OnDisconnectedAsync(exception);
+    }
+
 }

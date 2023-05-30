@@ -25,4 +25,5 @@ app.UseCors();
 app.MapGet("/", () => "HUB is running");
 
 app.MapHub<PrinterHub>("/printer-status");
+
 app.Run();

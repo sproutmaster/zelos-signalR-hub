@@ -11,37 +11,52 @@ public class PrinterHub: Hub {
 
     public StackExchange.Redis.IDatabase? Redis;
     public string? printer_data;
+    public bool discconnected = false;
 
     public override async Task OnConnectedAsync() {
 
         await base.OnConnectedAsync();
 
+        Console.WriteLine("Client connected");
+        Console.WriteLine("Connecting to Redis..");
+
         Redis = RedisStore.RedisCache;
+
+        Console.WriteLine("Connected to Redis");
 
         while (true) {
 
-            Thread.Sleep(3000);
+            Console.WriteLine("Sleeping 4 sec");
+            Thread.Sleep(4000);
 
-            if (Redis.IsConnected("printer_data"))
-            {
-                if (Redis.StringGet("printer_data") == printer_data)
+            if (discconnected)
+                break;
+            
+            if (Redis.IsConnected("running")) {
+                string? tempData = Redis.StringGet("printer_data");
+
+                if (tempData == printer_data) {
+                    Console.WriteLine("No new data");
                     continue;
+                }
 
-                printer_data = Redis.StringGet("printer_data");
-                Console.WriteLine(printer_data);
-                await Clients.All.SendAsync("printer_data", printer_data);
+                printer_data = tempData;
+
+                Console.WriteLine("Sending printer data to client");
+                await Clients.All.SendAsync("update_printer", printer_data);
             }
 
-            else {
-                Console.WriteLine("Redis is not connected");
-            }
+            else 
+                Console.WriteLine("Disconnected from Redis");
         }
     }
 
 
-    public override async Task OnDisconnectedAsync(Exception? exception)
-    {
+    public override async Task OnDisconnectedAsync(Exception? exception) {
+        discconnected = true;
+        Console.WriteLine("Client disconnected");
         await base.OnDisconnectedAsync(exception);
+
     }
 
 }
